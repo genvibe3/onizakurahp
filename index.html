@@ -353,43 +353,41 @@
       display: inline-block;
       padding: 15px 44px;
       font-family: var(--ff-mono);
-      font-size: .75rem;
+      font-size: .85rem;
+      /* slightly larger font */
+      font-weight: bold;
       letter-spacing: .2em;
       text-transform: uppercase;
       text-decoration: none;
       position: relative;
       overflow: hidden;
-      transition: color .3s;
+      transition: color .3s, background-color .3s;
+      border-radius: 4px;
+      /* Slight rounding to make it look a bit softer */
     }
 
     .btn-primary {
-      border: 1px solid var(--blood);
+      border: 2px solid var(--blood-2);
       color: #fff;
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      inset: 0;
       background: var(--blood);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .3s ease;
-      z-index: -1;
+      /* Make the button solid by default for better contrast */
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-primary:hover::before {
-      transform: scaleX(1);
+    .btn-primary:hover {
+      background: var(--blood-2);
     }
 
     .btn-ghost {
-      border: 1px solid var(--blood);
-      color: var(--blood);
+      border: 2px solid var(--blood-2);
+      color: var(--blood-2);
+      background: rgba(255, 255, 255, 0.5);
+      /* Semi-transparent white backing for legibility */
     }
 
     .btn-ghost:hover {
       color: #fff;
-      background: var(--blood);
+      background: var(--blood-2);
     }
 
     @keyframes fadeUp {
