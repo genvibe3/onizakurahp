@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ONIZAKURA 鬼桜 — Demon Sakura: Cursed Blade</title>
+  <meta name="description" content="A cursed demon samurai fights through an endless cherry blossom ruin. Slash. Awaken. Survive. Coming to Google Play."/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --blood:      #b52a1c;
+      --blood-2:    #7a1010;
+      --flame:      #e85d04;
+      --flame-hi:   #faa307;
+      --sakura:     #d98fa0;
+      --sakura-lo:  #f2d4dc;
+      --gold:       #c9924a;
+      --gold-hi:    #e8c070;
+      --ink:        #070509;
+      --ink-2:      #0e0910;
+      --ink-3:      #160d18;
+      --glass:      rgba(255,255,255,0.04);
+      --rim:        rgba(180,42,28,0.22);
+      --rimw:       rgba(255,255,255,0.07);
+      --ff-head:    'Cinzel Decorative', serif;
+      --ff-body:    'EB Garamond', serif;
+      --ff-mono:    'Share Tech Mono', monospace;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--ink);
+      color: #ede4e6;
+      font-family: var(--ff-body);
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE ─── */
+    body::after {
+      content:'';
+      position:fixed; inset:0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:9999; opacity:.5;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display: flex; align-items:center; justify-content:space-between;
+      padding: 20px 48px;
+      background: linear-gradient(180deg, rgba(7,5,9,.92) 0%, transparent 100%);
+      backdrop-filter: blur(2px);
+    }
+    .nav-logo {
+      font-family: var(--ff-head);
+      font-size: .85rem;
+      letter-spacing: .15em;
+      color: var(--blood);
+      text-decoration:none;
+    }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a {
+      font-family: var(--ff-mono);
+      font-size: .68rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color: rgba(237,228,230,.45);
+      text-decoration:none;
+      transition: color .25s;
+    }
+    .nav-links a:hover { color:#fff; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position:relative;
+      min-height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:120px 24px 80px;
+      overflow:hidden;
+    }
+    .hero-bg {
+      position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(ellipse 100% 70% at 50% 35%, rgba(181,42,28,.22) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 15% 85%, rgba(232,93,4,.08) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 85% 15%, rgba(217,143,160,.06) 0%, transparent 55%),
+        linear-gradient(180deg, #070509 0%, #130a12 55%, #070509 100%);
+    }
+
+    /* big kanji watermark */
+    .hero-kanji-bg {
+      position:absolute;
+      font-size: clamp(180px, 32vw, 400px);
+      font-weight:900;
+      color: rgba(181,42,28,.045);
+      font-family: var(--ff-body);
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none; user-select:none; z-index:0;
+      white-space:nowrap; letter-spacing:-.02em;
+    }
+
+    /* petals */
+    .petals { position:absolute; inset:0; pointer-events:none; z-index:1; }
+    .p {
+      position:absolute; top:-12px;
+      background: var(--sakura);
+      border-radius: 0 60% 60% 60%;
+      opacity:0;
+      animation: pfall linear infinite;
+    }
+    @keyframes pfall {
+      0%   { transform:translateY(-10px) rotate(0deg);   opacity:0; }
+      8%   { opacity:.55; }
+      92%  { opacity:.2; }
+      100% { transform:translateY(105vh) rotate(800deg); opacity:0; }
+    }
+    .p:nth-child(1){left:5%;  width:7px; height:7px; animation-duration:8s;  animation-delay:0s;}
+    .p:nth-child(2){left:14%; width:5px; height:5px; animation-duration:11s; animation-delay:1.2s;}
+    .p:nth-child(3){left:24%; width:9px; height:9px; animation-duration:9s;  animation-delay:2.5s;}
+    .p:nth-child(4){left:36%; width:6px; height:6px; animation-duration:7s;  animation-delay:0.7s;}
+    .p:nth-child(5){left:47%; width:8px; height:8px; animation-duration:13s; animation-delay:4s;}
+    .p:nth-child(6){left:58%; width:5px; height:5px; animation-duration:8s;  animation-delay:1.8s;}
+    .p:nth-child(7){left:68%; width:10px;height:10px;animation-duration:10s; animation-delay:3.2s;}
+    .p:nth-child(8){left:78%; width:6px; height:6px; animation-duration:9s;  animation-delay:0.4s;}
+    .p:nth-child(9){left:88%; width:7px; height:7px; animation-duration:11s; animation-delay:5s;}
+    .p:nth-child(10){left:95%;width:5px; height:5px; animation-duration:7s;  animation-delay:2s;}
+
+    /* hero text */
+    .hero-content { position:relative; z-index:2; max-width:800px; }
+
+    .hero-eyebrow {
+      font-family:var(--ff-mono);
+      font-size:.7rem; letter-spacing:.4em;
+      color:var(--gold); text-transform:uppercase;
+      margin-bottom:28px;
+      opacity:0; animation:fadeUp .8s ease .2s forwards;
+    }
+    .hero-title {
+      font-family:var(--ff-head);
+      font-size: clamp(2.8rem,11vw,8.5rem);
+      font-weight:900; line-height:.88;
+      letter-spacing:.06em;
+      background: linear-gradient(145deg, #fff 0%, var(--sakura-lo) 35%, var(--blood) 80%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      opacity:0; animation:fadeUp .9s ease .45s forwards;
+    }
+    .hero-sub {
+      font-family:var(--ff-mono);
+      font-size:clamp(.75rem,1.6vw,1rem);
+      letter-spacing:.28em; color:var(--sakura);
+      margin-top:14px;
+      opacity:0; animation:fadeUp .9s ease .65s forwards;
+    }
+    .hero-rule {
+      width:64px; height:1px;
+      background:linear-gradient(90deg,transparent,var(--blood),transparent);
+      margin:36px auto;
+      opacity:0; animation:fadeUp .9s ease .85s forwards;
+    }
+    .hero-tagline {
+      font-size:clamp(1rem,2.2vw,1.25rem);
+      color:rgba(237,228,230,.68);
+      font-style:italic; line-height:1.6;
+      opacity:0; animation:fadeUp .9s ease 1.05s forwards;
+    }
+    .hero-tagline strong { color:var(--sakura-lo); font-style:normal; }
+
+    .hero-cta {
+      margin-top:52px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+      opacity:0; animation:fadeUp .9s ease 1.25s forwards;
+    }
+    .btn {
+      display:inline-block; padding:15px 44px;
+      font-family:var(--ff-mono); font-size:.75rem;
+      letter-spacing:.2em; text-transform:uppercase;
+      text-decoration:none; position:relative; overflow:hidden;
+      transition:color .3s;
+    }
+    .btn-primary { border:1px solid var(--blood); color:#fff; }
+    .btn-primary::before {
+      content:''; position:absolute; inset:0;
+      background:var(--blood); transform:scaleX(0);
+      transform-origin:left; transition:transform .3s ease; z-index:-1;
+    }
+    .btn-primary:hover::before { transform:scaleX(1); }
+    .btn-ghost { border:1px solid var(--rimw); color:rgba(237,228,230,.5); }
+    .btn-ghost:hover { color:#fff; border-color:rgba(255,255,255,.25); }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ─── SECTION BASE ─── */
+    .section { padding:110px 24px; }
+    .section-inner { max-width:1020px; margin:0 auto; }
+
+    .label {
+      font-family:var(--ff-mono); font-size:.65rem;
+      letter-spacing:.42em; color:var(--blood);
+      text-transform:uppercase; margin-bottom:14px;
+      display:block;
+    }
+    h2.s-title {
+      font-family:var(--ff-head);
+      font-size:clamp(1.6rem,3.5vw,2.8rem);
+      font-weight:700; color:#fff; line-height:1.15;
+      margin-bottom:48px;
+    }
+
+    hr.rule {
+      border:none;
+      border-top:1px solid rgba(181,42,28,.2);
+      margin:0;
+    }
+
+    /* ─── LORE ─── */
+    .lore-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;
+    }
+    @media(max-width:680px){ .lore-grid{ grid-template-columns:1fr; gap:36px; } }
+
+    .lore-text p {
+      font-size:1.05rem; line-height:1.85;
+      color:rgba(237,228,230,.72); margin-bottom:18px;
+    }
+    .lore-text p em { color:var(--sakura); font-style:italic; }
+    .lore-text p strong { color:#fff; }
+
+    .lore-quote {
+      border-left:2px solid var(--blood);
+      padding:20px 28px;
+      margin-top:28px;
+      background:var(--glass);
+    }
+    .lore-quote p {
+      font-size:1.05rem; font-style:italic;
+      color:var(--sakura-lo); margin:0;
+    }
+    .lore-quote cite {
+      display:block; margin-top:10px;
+      font-family:var(--ff-mono); font-size:.65rem;
+      letter-spacing:.2em; color:var(--gold);
+      font-style:normal;
+    }
+
+    .world-rules { list-style:none; margin-top:8px; }
+    .world-rules li {
+      padding:14px 0;
+      border-bottom:1px solid var(--rimw);
+      font-size:.95rem; color:rgba(237,228,230,.65);
+      display:flex; gap:14px; align-items:flex-start;
+    }
+    .world-rules li:last-child { border:none; }
+    .world-rules li::before {
+      content:'桜';
+      color:var(--blood); flex-shrink:0;
+      margin-top:2px; font-size:.85rem;
+    }
+
+    /* ─── CHARACTER ─── */
+    .char-section { background:var(--ink-2); }
+
+    .char-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:48px;
+    }
+    @media(max-width:680px){ .char-grid{ grid-template-columns:1fr; } }
+
+    .char-card {
+      background:var(--glass); border:1px solid var(--rim);
+      padding:36px 32px; position:relative; overflow:hidden;
+    }
+    .char-card::before {
+      content:''; position:absolute;
+      top:0; left:0; width:3px; height:100%;
+      background:linear-gradient(180deg, var(--blood), var(--flame));
+    }
+    .char-card h3 {
+      font-family:var(--ff-head); font-size:1rem;
+      color:var(--sakura-lo); margin-bottom:6px;
+      letter-spacing:.08em;
+    }
+    .char-card .char-jp {
+      font-family:var(--ff-mono); font-size:.7rem;
+      color:var(--gold); letter-spacing:.2em; margin-bottom:20px;
+    }
+    .char-card p {
+      font-size:.95rem; color:rgba(237,228,230,.62);
+      line-height:1.75;
+    }
+
+    .state-table {
+      width:100%; border-collapse:collapse;
+      font-size:.88rem; margin-top:20px;
+    }
+    .state-table th {
+      font-family:var(--ff-mono); font-size:.62rem;
+      letter-spacing:.18em; color:var(--gold);
+      text-transform:uppercase; padding:10px 12px;
+      border-bottom:1px solid var(--rim); text-align:left;
+    }
+    .state-table td {
+      padding:10px 12px; color:rgba(237,228,230,.68);
+      border-bottom:1px solid rgba(255,255,255,.04); vertical-align:top;
+    }
+    .state-table tr:last-child td { border:none; }
+    .flame-badge {
+      display:inline-block; padding:2px 8px;
+      background:rgba(232,93,4,.15);
+      border:1px solid rgba(232,93,4,.35);
+      color:var(--flame-hi); font-size:.72rem;
+      font-family:var(--ff-mono); letter-spacing:.1em;
+    }
+
+    /* ─── ENEMIES ─── */
+    .enemies-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+    }
+    @media(max-width:680px){ .enemies-grid{ grid-template-columns:1fr; } }
+
+    .enemy-card {
+      border:1px solid var(--rimw);
+      padding:28px 24px;
+      background:var(--glass);
+      transition:border-color .3s, transform .3s;
+    }
+    .enemy-card:hover {
+      border-color:rgba(181,42,28,.45);
+      transform:translateY(-4px);
+    }
+    .enemy-icon { font-size:1.8rem; margin-bottom:12px; }
+    .enemy-card h3 {
+      font-family:var(--ff-head); font-size:.88rem;
+      color:var(--sakura-lo); margin-bottom:6px; letter-spacing:.05em;
+    }
+    .enemy-jp {
+      font-family:var(--ff-mono); font-size:.62rem;
+      color:var(--gold); letter-spacing:.18em; margin-bottom:14px;
+      display:block;
+    }
+    .enemy-card p {
+      font-size:.88rem; color:rgba(237,228,230,.58); line-height:1.7;
+    }
+
+    /* ─── GAMEPLAY ─── */
+    .gameplay-section { background:var(--ink-3); }
+
+    .features-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:24px; margin-top:12px;
+    }
+    .feature {
+      border:1px solid var(--rimw); padding:32px 28px;
+      position:relative; background:var(--glass);
+      transition:border-color .3s, transform .3s;
+    }
+    .feature:hover { border-color:var(--rim); transform:translateY(-4px); }
+    .feature-num {
+      font-family:var(--ff-mono); font-size:.62rem;
+      color:var(--blood); letter-spacing:.2em;
+      margin-bottom:14px; display:block;
+    }
+    .feature h3 {
+      font-family:var(--ff-head); font-size:.92rem;
+      color:#fff; margin-bottom:12px; letter-spacing:.05em;
+    }
+    .feature p { font-size:.9rem; color:rgba(237,228,230,.58); line-height:1.72; }
+
+    /* loop diagram */
+    .loop-box {
+      margin-top:56px; padding:40px 36px;
+      border:1px solid var(--rim); background:var(--glass);
+      position:relative; overflow:hidden;
+    }
+    .loop-box::before {
+      content:'CORE LOOP';
+      position:absolute; top:16px; right:24px;
+      font-family:var(--ff-mono); font-size:.6rem;
+      letter-spacing:.3em; color:var(--blood); opacity:.5;
+    }
+    .loop-steps {
+      display:flex; flex-wrap:wrap; gap:0;
+      align-items:center; justify-content:center;
+    }
+    .loop-step {
+      text-align:center; padding:16px 20px; flex:0 0 auto;
+    }
+    .loop-step .icon { font-size:1.6rem; }
+    .loop-step .txt {
+      font-family:var(--ff-mono); font-size:.65rem;
+      letter-spacing:.12em; color:rgba(237,228,230,.6);
+      margin-top:8px; display:block;
+    }
+    .loop-arrow {
+      font-size:1.2rem; color:var(--blood); flex-shrink:0;
+      padding:0 4px;
+    }
+
+    /* ─── NARRATIVE MILESTONES ─── */
+    .milestones {
+      margin-top:8px;
+      display:flex; flex-direction:column; gap:0;
+    }
+    .milestone {
+      display:grid; grid-template-columns:130px 1fr;
+      gap:24px; padding:20px 0;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      align-items:start;
+    }
+    .milestone:last-child { border:none; }
+    .ms-kills {
+      font-family:var(--ff-mono); font-size:.7rem;
+      color:var(--blood); letter-spacing:.12em;
+    }
+    .ms-rank {
+      font-family:var(--ff-head); font-size:.85rem;
+      color:var(--sakura-lo); letter-spacing:.08em; margin-bottom:4px;
+    }
+    .ms-jp {
+      font-family:var(--ff-mono); font-size:.62rem;
+      color:var(--gold); letter-spacing:.15em; margin-bottom:6px; display:block;
+    }
+    .ms-desc { font-size:.88rem; color:rgba(237,228,230,.5); }
+
+    /* ─── ATMOSPHERE ─── */
+    .atm-section { background:var(--ink-2); }
+    .atm-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+    }
+    @media(max-width:680px){ .atm-grid{ grid-template-columns:1fr; } }
+
+    .atm-card {
+      padding:36px 28px;
+      border:1px solid var(--rimw); background:var(--glass);
+      transition:border-color .3s;
+    }
+    .atm-card:hover { border-color:var(--rim); }
+    .atm-card .jp-word {
+      font-family:var(--ff-mono); font-size:.62rem;
+      letter-spacing:.25em; color:var(--gold); margin-bottom:8px; display:block;
+    }
+    .atm-card h3 {
+      font-family:var(--ff-head); font-size:1rem;
+      color:#fff; margin-bottom:4px;
+    }
+    .atm-card .meaning {
+      font-size:.8rem; color:var(--sakura);
+      font-style:italic; margin-bottom:18px; display:block;
+    }
+    .atm-card p { font-size:.9rem; color:rgba(237,228,230,.55); line-height:1.75; }
+
+    /* ─── PRIVACY ─── */
+    .privacy-section { background:var(--ink-3); }
+
+    .privacy-body {
+      background:var(--glass); border:1px solid var(--rimw);
+      padding:56px 56px;
+      max-width:800px; margin:0 auto;
+    }
+    @media(max-width:680px){ .privacy-body{ padding:32px 24px; } }
+
+    .privacy-body h3 {
+      font-family:var(--ff-head); font-size:1.1rem;
+      color:var(--sakura-lo); margin:36px 0 12px; letter-spacing:.05em;
+    }
+    .privacy-body h3:first-child { margin-top:0; }
+    .privacy-body h4 {
+      font-family:var(--ff-mono); font-size:.72rem;
+      color:var(--gold); letter-spacing:.2em;
+      text-transform:uppercase; margin:24px 0 10px;
+    }
+    .privacy-body p {
+      font-size:.95rem; color:rgba(237,228,230,.65);
+      line-height:1.82; margin-bottom:14px;
+    }
+    .privacy-body ul {
+      list-style:none; margin:0 0 16px 0;
+    }
+    .privacy-body ul li {
+      font-size:.93rem; color:rgba(237,228,230,.6);
+      line-height:1.75; padding:5px 0 5px 20px;
+      position:relative;
+    }
+    .privacy-body ul li::before {
+      content:'—'; position:absolute; left:0;
+      color:var(--blood);
+    }
+    .privacy-body a { color:var(--sakura); text-underline-offset:3px; }
+    .privacy-effective {
+      font-family:var(--ff-mono); font-size:.65rem;
+      letter-spacing:.2em; color:var(--gold);
+      margin-bottom:36px; display:block;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top:1px solid rgba(181,42,28,.15);
+      padding:52px 24px;
+      text-align:center;
+    }
+    .footer-logo {
+      font-family:var(--ff-head); font-size:1.1rem;
+      color:var(--blood); letter-spacing:.2em;
+      margin-bottom:6px;
+    }
+    .footer-sub {
+      font-family:var(--ff-mono); font-size:.62rem;
+      color:rgba(237,228,230,.25); letter-spacing:.25em;
+      margin-bottom:24px;
+    }
+    .footer-links {
+      display:flex; gap:28px; justify-content:center;
+      flex-wrap:wrap; list-style:none; margin-bottom:28px;
+    }
+    .footer-links a {
+      font-family:var(--ff-mono); font-size:.62rem;
+      letter-spacing:.2em; color:rgba(237,228,230,.35);
+      text-decoration:none; text-transform:uppercase;
+      transition:color .25s;
+    }
+    .footer-links a:hover { color:var(--sakura); }
+    .footer-copy {
+      font-size:.82rem; color:rgba(237,228,230,.2);
+    }
+
+    /* ─── MISC ─── */
+    .text-center { text-align:center; }
+    .mt-8 { margin-top:8px; }
+    .spacer { height:1px; background:linear-gradient(90deg,transparent,rgba(181,42,28,.2),transparent); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ONIZAKURA</a>
+  <ul class="nav-links">
+    <li><a href="#lore">Lore</a></li>
+    <li><a href="#gameplay">Gameplay</a></li>
+    <li><a href="#atmosphere">World</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-kanji-bg">鬼桜</div>
+  <div class="petals">
+    <div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div>
+    <div class="p"></div><div class="p"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Stay Vibe &nbsp;·&nbsp; Mobile Action Game</div>
+    <h1 class="hero-title">ONIZAKURA</h1>
+    <div class="hero-sub">鬼 桜 &nbsp;—&nbsp; Demon Sakura: Cursed Blade</div>
+    <div class="hero-rule"></div>
+    <p class="hero-tagline">
+      A cursed samurai turned demon slashes through an endless ruin of cherry blossoms.<br/>
+      <strong>Slash. Awaken. Survive. Repeat.</strong>
+    </p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-primary">Google Play — Coming Soon</a>
+      <a href="#lore" class="btn btn-ghost">Learn the Legend</a>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- LORE -->
+<section class="section" id="lore">
+  <div class="section-inner">
+    <span class="label">// World Setting</span>
+    <h2 class="s-title">The Ruins of Oni-Zakura</h2>
+    <div class="lore-grid">
+      <div class="lore-text">
+        <p>
+          At the end of the Warring States era, a once-mighty fortress was consumed by flames of war. Now it exists as <em>a cursed space frozen in time</em> — a ruined castle where petals of pink and violet fall eternally beneath a twilight sky.
+        </p>
+        <p>
+          The protagonist, <strong>Onimaru (鬼丸)</strong> — "Blade of the Demon" — was a samurai who fell to a terrible curse. His body now bears a demon's mask, twin horns, and eyes burning with crimson flame. He does not remember his past. He only knows one truth: <em>as long as the curse remains unbroken, he must fight.</em>
+        </p>
+        <p>
+          Every enemy slain releases a fragment of purified curse energy. Every coin collected makes him stronger. And somewhere, beyond ten thousand kills, the mask may finally shatter.
+        </p>
+        <div class="lore-quote">
+          <p>"Until this flame burns away every last curse — I will not let go of this blade."</p>
+          <cite>— Onimaru 鬼丸</cite>
+        </div>
+      </div>
+      <div>
+        <span class="label" style="margin-bottom:20px;">// Laws of This World</span>
+        <ul class="world-rules">
+          <li>The ruined castle has no end — enemies pour in from both sides, forever.</li>
+          <li>Enemies are born from the curse — soldiers' wraiths, phantom archers, and towering Oni.</li>
+          <li>Cherry blossoms are both beauty and curse — enemies dissolve into petals when slain.</li>
+          <li>Sake is the key to Awakening — the cursed liquor ignites the demon's full power.</li>
+          <li>Coins are crystallized curse energy — collect them, grow stronger, fight longer.</li>
+          <li>The curse can be broken — but only by one who refuses to stop.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- CHARACTER -->
+<section class="section char-section">
+  <div class="section-inner">
+    <span class="label">// The Demon Samurai</span>
+    <h2 class="s-title">Onimaru — Two States of Fury</h2>
+    <div class="char-grid">
+      <div class="char-card">
+        <h3>Normal State</h3>
+        <div class="char-jp">通常 · TSŪJŌ</div>
+        <p>Dark armor and a dim crimson cape. Eyes glow quietly behind the demon mask. Onimaru moves with the disciplined ferocity of a seasoned swordsman — each strike precise, each step deliberate. His katana cleaves through wraiths with fluid, practiced aggression.</p>
+        <table class="state-table">
+          <tr><th>Weapon</th><td>Standard Katana</td></tr>
+          <tr><th>Attack</th><td>Single-direction slash combo chain</td></tr>
+          <tr><th>Style</th><td>Fast, controlled, technical</td></tr>
+        </table>
+      </div>
+      <div class="char-card">
+        <h3>Awakening State</h3>
+        <div class="char-jp">覚醒 · KAKUSEI — Flaming Sword</div>
+        <p>When the Awakening Gauge hits MAX, the curse ignites. Onimaru's entire body erupts in flame. His eyes blaze with blinding light. The katana becomes a flaming blade of devastating power — strikes are wider, pierce through multiple enemies, and leave trails of fire that purify all they touch.</p>
+        <table class="state-table">
+          <tr><th>Trigger</th><td>Awakening Gauge reaches 100 (Sake + kills)</td></tr>
+          <tr><th>Attack</th><td><span class="flame-badge">FLAME SLASH</span> — wide arc, piercing</td></tr>
+          <tr><th>Duration</th><td>8s base → up to 20s (fully upgraded)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- ENEMIES -->
+<section class="section" id="enemies">
+  <div class="section-inner">
+    <span class="label">// Those Who Stand in the Way</span>
+    <h2 class="s-title">Enemies of the Cursed Ruin</h2>
+    <div class="enemies-grid">
+      <div class="enemy-card">
+        <div class="enemy-icon">👤</div>
+        <h3>Wraith Soldiers</h3>
+        <span class="enemy-jp">亡魂 · MUKURO</span>
+        <p>The restless souls of soldiers who died in the castle's fall. They close in from both sides, relentless and numerous. The backbone of every wave — underestimate them at your peril.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="enemy-icon">🏹</div>
+        <h3>Phantom Archers</h3>
+        <span class="enemy-jp">幽霊弓手 · YŪREI YUMITE</span>
+        <p>Spectral bowmen who fire from range. Their arrows cannot be blocked — only <em>jumped over</em>. Three arrow types: green (slow), blue (medium), red (fast). Stay airborne or stay dead.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="enemy-icon">👹</div>
+        <h3>The Oni</h3>
+        <span class="enemy-jp">鬼 · ONI</span>
+        <p>Massive demon lords with enormous HP pools. They attack up close and hurl boulders from range. Defeating one drops a golden coin worth 20 — the greatest challenge, the greatest reward.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- GAMEPLAY -->
+<section class="section gameplay-section" id="gameplay">
+  <div class="section-inner">
+    <span class="label">// Core Systems</span>
+    <h2 class="s-title">How You Fight to Survive</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-num">01 //</span>
+        <h3>Free Movement</h3>
+        <p>Drag anywhere on the left 40% of the screen to move freely left and right. Chase coins, dodge enemies, position for the perfect strike — full tactical freedom in a 2D plane.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">02 //</span>
+        <h3>Jump + Attack</h3>
+        <p>Two dedicated buttons on the right side. Jump to dodge arrows. Attack to slash enemies. Combine them mid-air for a devastating <em>Jump Attack</em> (落下斬) that craters enemies below.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">03 //</span>
+        <h3>Combo Chain</h3>
+        <p>Each successive kill within the combo window multiplies your score up to ×5.0. Build rhythm: move, slash, jump, slash again. The combo is your momentum — don't let it drop.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">04 //</span>
+        <h3>Awakening Gauge</h3>
+        <p>Fill the gauge by killing enemies and collecting Sake items (+50 each). At MAX (100), Awakening triggers automatically — an unstoppable 8–20 second rampage of flame and ruin.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">05 //</span>
+        <h3>Coin Upgrades</h3>
+        <p>Every slain enemy drops coins. Spend them in the Upgrade Shop between runs: boost HP, attack power, awakening duration, coin magnet range, and coin bonus multiplier. Get stronger every session.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">06 //</span>
+        <h3>Kill Record</h3>
+        <p>Your score is your kill count. Beat your personal best. Every new record is proof that you have grown — that the curse of yesterday's Onimaru has been surpassed.</p>
+      </div>
+    </div>
+
+    <!-- CORE LOOP -->
+    <div class="loop-box">
+      <div class="loop-steps">
+        <div class="loop-step"><div class="icon">🏃</div><span class="txt">MOVE FREELY</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">⚔️</div><span class="txt">SLASH ENEMIES</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">🪙</div><span class="txt">COLLECT COINS</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">🍶</div><span class="txt">GRAB SAKE</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">🔥</div><span class="txt">AWAKENING!</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">💀</div><span class="txt">GAME OVER</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">⬆️</div><span class="txt">UPGRADE</span></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step"><div class="icon">🔄</div><span class="txt">RETRY</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- CURSE PROGRESSION -->
+<section class="section">
+  <div class="section-inner">
+    <span class="label">// Narrative Progression</span>
+    <h2 class="s-title">Breaking the Curse — Kill by Kill</h2>
+    <p style="color:rgba(237,228,230,.62); margin-bottom:40px; max-width:640px;">
+      The curse does not break all at once. With each milestone reached, Onimaru's demon form weakens — and the human beneath slowly resurfaces.
+    </p>
+    <div class="milestones">
+      <div class="milestone">
+        <div class="ms-kills">100 KILLS</div>
+        <div>
+          <div class="ms-rank">The Mask Cracks</div>
+          <span class="ms-jp">仮面の均裂 · KAMEN NO KINRETSU</span>
+          <div class="ms-desc">The first fracture appears across the demon mask. Something stirs beneath.</div>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="ms-kills">500 KILLS</div>
+        <div>
+          <div class="ms-rank">Fragments of Memory</div>
+          <span class="ms-jp">記憶の編鱗 · KIOKU NO HENRIN</span>
+          <div class="ms-desc">Shards of a human past flash between strikes. Who was he before the curse?</div>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="ms-kills">1,500 KILLS</div>
+        <div>
+          <div class="ms-rank">The Horns Wane</div>
+          <span class="ms-jp">角の弱化 · TSUNO NO JAKKA</span>
+          <div class="ms-desc">The demon horns shrink. The curse weakens visibly. The end feels possible.</div>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="ms-kills">5,000 KILLS</div>
+        <div>
+          <div class="ms-rank">Human Eyes</div>
+          <span class="ms-jp">人間の眼 · NINGEN NO ME</span>
+          <div class="ms-desc">For a brief moment, the burning eyes fade to something human — calm and sorrowful.</div>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="ms-kills">15,000 KILLS</div>
+        <div>
+          <div class="ms-rank">The Mask Falls</div>
+          <span class="ms-jp">仮面脱落 · KAMEN DATSURAKU</span>
+          <div class="ms-desc">The demon mask shatters to the ground. The face beneath is exposed.</div>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="ms-kills">50,000 KILLS</div>
+        <div>
+          <div class="ms-rank">Liberation</div>
+          <span class="ms-jp">解放 · KAIHŌ</span>
+          <div class="ms-desc">The curse is fully broken. Onimaru stands as a man again beneath the eternal blossoms. The ruin falls silent — for now.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- ATMOSPHERE -->
+<section class="section atm-section" id="atmosphere">
+  <div class="section-inner">
+    <span class="label">// Aesthetic Philosophy</span>
+    <h2 class="s-title">Three Pillars of the World</h2>
+    <div class="atm-grid">
+      <div class="atm-card">
+        <span class="jp-word">幽玄 · YŪGEN</span>
+        <h3>Profound Beauty</h3>
+        <span class="meaning">Beauty that lies beyond what is visible</span>
+        <p>Mist-shrouded ruins, distant silhouettes of shattered towers, petals that fall without wind. The world of ONIZAKURA is beautiful precisely because it is broken and cursed. Every visual speaks of something lost.</p>
+      </div>
+      <div class="atm-card">
+        <span class="jp-word">無常 · MUJŌ</span>
+        <h3>Impermanence</h3>
+        <span class="meaning">All things pass — and that is why they matter</span>
+        <p>Cherry blossoms are beautiful because they fall. Game over is not failure — it is part of the cycle. Every run ends. Every run teaches. Rise, and the next run begins with the wisdom of the last.</p>
+      </div>
+      <div class="atm-card">
+        <span class="jp-word">克己 · KOKKI</span>
+        <h3>Self-Mastery</h3>
+        <span class="meaning">The true enemy is within</span>
+        <p>The wraiths and archers are projections. The real challenge is the urge to quit after a bad run. Each retry is an act of will. Each new record is evidence that you have conquered your previous self.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="spacer"></div>
+
+<!-- PRIVACY POLICY -->
+<section class="section privacy-section" id="privacy">
+  <div class="section-inner">
+    <span class="label">// Legal</span>
+    <h2 class="s-title text-center">Privacy Policy</h2>
+    <div class="privacy-body">
+      <span class="privacy-effective">Effective Date: March 13, 2026</span>
+      <p>This Privacy Policy applies to the mobile game <strong>ONIZAKURA — Demon Sakura: Cursed Blade</strong> (the "App" or "Game") developed and published by Stay Vibe ("We", "Us", or "Our"). We are committed to protecting your privacy and ensuring you have a safe experience.</p>
+
+      <h3>1. Introduction</h3>
+      <p>ONIZAKURA is a free-to-play mobile game supported by advertising. We do not require you to create an account, log in, or provide your name or email address to play the Game.</p>
+      <p>By downloading and playing ONIZAKURA, you agree to the collection and use of information in relation to this policy. If you do not agree, please do not use our App.</p>
+
+      <h3>2. Why We Collect Data</h3>
+      <p>We collect minimal data necessary to operate, maintain, and improve the Game. The primary purposes are:</p>
+      <ul>
+        <li><strong>Game Service:</strong> Ensuring the App functions correctly on your device.</li>
+        <li><strong>Analytics:</strong> Understanding how users interact with the Game to fix bugs and improve gameplay mechanics.</li>
+        <li><strong>Advertising:</strong> Serving advertisements (interstitial and rewarded ads) which allow us to offer the Game for free.</li>
+      </ul>
+
+      <h3>3. What Data We Collect</h3>
+      <p>Stay Vibe does not collect any data that allows us to identify you directly (such as your name, email, address, or phone number). We do not have a login system, and we do not process in-app purchases directly.</p>
+      <p>However, our third-party partners may collect certain technical data automatically from your device, including:</p>
+      <ul>
+        <li><strong>Device Information:</strong> Device model, OS version, screen size, language settings, and IP address.</li>
+        <li><strong>Mobile Identifiers:</strong> Advertising ID (Google Advertising ID / GAID) used to deliver personalized ads.</li>
+        <li><strong>Game Activity:</strong> Gameplay data such as session duration and interactions with ads.</li>
+        <li><strong>Crash Data:</strong> Logs related to app crashes to help us fix stability issues.</li>
+      </ul>
+
+      <h3>4. Third-Party Services</h3>
+      <h4>Google AdMob</h4>
+      <p>We use Google AdMob to display advertisements. AdMob may collect and use your device's Advertising ID and other data to serve personalized ads. For more information, visit <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a>.</p>
+      <h4>Firebase Analytics</h4>
+      <p>We use Google Firebase Analytics to understand usage patterns and optimize the game experience. Firebase collects data such as session length, geography (country/region), and in-game event data. For more information, visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank">How Google uses information from partner sites</a>.</p>
+
+      <h3>5. Data Sharing</h3>
+      <p>We do not sell your personal data. We may share the technical data collected with our third-party partners (listed above) solely for the purposes of analytics and advertising. We may also disclose data if required by law, to enforce our rights, or to protect the safety of our users.</p>
+
+      <h3>6. Data Retention</h3>
+      <p>We do not store any personal data on our own servers since we do not require user accounts. Data collected by our third-party partners (AdMob, Firebase) is retained according to their respective retention policies.</p>
+
+      <h3>7. Children's Privacy</h3>
+      <p>ONIZAKURA is specifically targeted at users aged 16 and older. We do not knowingly collect or solicit personal data from children under the age of 13 (or 16 depending on the jurisdiction). If you are under 16, please do not use this App. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately.</p>
+
+      <h3>8. International Data Transfers</h3>
+      <p>Stay Vibe and our third-party partners operate globally. Your data may be transferred to and processed in countries other than your own. These countries may have different data protection laws. By using the App, you consent to this transfer.</p>
+
+      <h3>9. Your Rights</h3>
+      <ul>
+        <li><strong>Opt-out of Targeted Ads:</strong> Adjust settings on your Android device via Settings → Google → Ads → Delete advertising ID or Opt out of Ads Personalization.</li>
+        <li><strong>Access and Deletion:</strong> Since we do not store personal identifiers directly, you may contact our third-party partners or reset your Advertising ID to unlink your past history.</li>
+      </ul>
+
+      <h3>10. Changes to This Policy</h3>
+      <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. Continued use of the App after changes are made constitutes acceptance of those changes.</p>
+
+      <h3>11. Contact Us</h3>
+      <p>If you have any questions or suggestions about our Privacy Policy, please contact us:</p>
+      <p><strong>Stay Vibe</strong><br/>Email: <a href="mailto:stayvibe33@gmail.com">stayvibe33@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ONIZAKURA</div>
+  <div class="footer-sub">鬼桜 — Demon Sakura: Cursed Blade</div>
+  <ul class="footer-links">
+    <li><a href="#lore">Lore</a></li>
+    <li><a href="#gameplay">Gameplay</a></li>
+    <li><a href="#atmosphere">World</a></li>
+    <li><a href="#privacy">Privacy Policy</a></li>
+    <li><a href="mailto:stayvibe33@gmail.com">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Stay Vibe. All Rights Reserved.</div>
+</footer>
+
+</body>
+</html>
