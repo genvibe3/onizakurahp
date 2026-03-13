@@ -13,27 +13,27 @@
   <style>
     /* ── TOKENS ── */
     :root {
-      --blood: #a26282;
-      /* Deep mauve */
-      --blood-2: #76445f;
-      /* Darker mauve */
-      --flame: #d98fa0;
-      /* Sakura pink */
-      --flame-hi: #f2d4dc;
-      /* Light pink */
-      --sakura: #d98fa0;
-      --sakura-lo: #f2d4dc;
+      --blood: #e86d82;
+      /* Brighter Sakura Pink */
+      --blood-2: #d14965;
+      /* Deeper Pink */
+      --flame: #ffb7c5;
+      /* Very light pink */
+      --flame-hi: #ffdae0;
+      /* Almost white pink */
+      --sakura: #f8a3b5;
+      --sakura-lo: #ffdae0;
       --gold: #e8c070;
       --gold-hi: #fff;
-      --ink: #3b2f51;
-      /* Deep purple background */
-      --ink-2: #4a3a63;
-      /* Slightly lighter purple */
-      --ink-3: #5b4776;
-      /* Lighter purple */
-      --glass: rgba(255, 255, 255, 0.08);
-      --rim: rgba(180, 42, 28, 0.22);
-      --rimw: rgba(255, 255, 255, 0.07);
+      --ink: #fdf5f6;
+      /* Very light pink background */
+      --ink-2: #fdf5f6;
+      --ink-3: #fadee3;
+      /* Slightly darker pink for sections */
+      --glass: rgba(255, 255, 255, 0.6);
+      /* Brighter glass effect */
+      --rim: rgba(255, 183, 197, 0.4);
+      --rimw: rgba(255, 255, 255, 0.4);
       --ff-head: 'Cinzel Decorative', serif;
       --ff-body: 'EB Garamond', serif;
       --ff-mono: 'Share Tech Mono', monospace;
@@ -53,7 +53,8 @@
 
     body {
       background: var(--ink);
-      color: #ede4e6;
+      color: #3b2a33;
+      /* Dark text for light background */
       font-family: var(--ff-body);
       font-size: 18px;
       line-height: 1.75;
@@ -82,7 +83,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 48px;
-      background: linear-gradient(180deg, rgba(59, 47, 81, .92) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(253, 245, 246, .92) 0%, transparent 100%);
       backdrop-filter: blur(2px);
     }
 
@@ -105,13 +106,13 @@
       font-size: .68rem;
       letter-spacing: .22em;
       text-transform: uppercase;
-      color: rgba(237, 228, 230, .45);
+      color: rgba(59, 42, 51, .7);
       text-decoration: none;
       transition: color .25s;
     }
 
     .nav-links a:hover {
-      color: #fff;
+      color: var(--blood);
     }
 
     /* ─── HERO ─── */
@@ -132,10 +133,10 @@
       inset: 0;
       z-index: 0;
       background:
-        radial-gradient(ellipse 100% 70% at 50% 35%, rgba(217, 143, 160, .22) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 50% at 15% 85%, rgba(135, 116, 163, .15) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 85% 15%, rgba(217, 143, 160, .1) 0%, transparent 55%),
-        linear-gradient(180deg, #bba7d6 0%, #3b2f51 55%, #2a203b 100%);
+        radial-gradient(ellipse 100% 70% at 50% 35%, rgba(255, 255, 255, .6) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 15% 85%, rgba(250, 222, 227, .8) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 85% 15%, rgba(255, 183, 197, .5) 0%, transparent 55%),
+        linear-gradient(180deg, #fdf5f6 0%, #fadee3 55%, #fdf5f6 100%);
     }
 
     /* big kanji watermark */
@@ -143,7 +144,7 @@
       position: absolute;
       font-size: clamp(180px, 32vw, 400px);
       font-weight: 900;
-      color: rgba(181, 42, 28, .045);
+      color: rgba(255, 183, 197, .2);
       font-family: var(--ff-body);
       top: 50%;
       left: 50%;
@@ -283,7 +284,7 @@
       font-family: var(--ff-mono);
       font-size: .7rem;
       letter-spacing: .4em;
-      color: var(--gold);
+      color: var(--blood-2);
       text-transform: uppercase;
       margin-bottom: 28px;
       opacity: 0;
@@ -296,7 +297,7 @@
       font-weight: 900;
       line-height: .88;
       letter-spacing: .06em;
-      background: linear-gradient(145deg, #fff 0%, var(--sakura-lo) 35%, var(--blood) 80%);
+      background: linear-gradient(145deg, #3b2a33 0%, var(--blood-2) 35%, var(--blood) 80%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -308,7 +309,7 @@
       font-family: var(--ff-mono);
       font-size: clamp(.75rem, 1.6vw, 1rem);
       letter-spacing: .28em;
-      color: var(--sakura);
+      color: var(--blood-2);
       margin-top: 14px;
       opacity: 0;
       animation: fadeUp .9s ease .65s forwards;
@@ -325,7 +326,7 @@
 
     .hero-tagline {
       font-size: clamp(1rem, 2.2vw, 1.25rem);
-      color: rgba(237, 228, 230, .68);
+      color: rgba(59, 42, 51, .8);
       font-style: italic;
       line-height: 1.6;
       opacity: 0;
@@ -333,7 +334,7 @@
     }
 
     .hero-tagline strong {
-      color: var(--sakura-lo);
+      color: var(--blood-2);
       font-style: normal;
     }
 
@@ -381,13 +382,13 @@
     }
 
     .btn-ghost {
-      border: 1px solid var(--rimw);
-      color: rgba(237, 228, 230, .5);
+      border: 1px solid var(--blood);
+      color: var(--blood);
     }
 
     .btn-ghost:hover {
       color: #fff;
-      border-color: rgba(255, 255, 255, .25);
+      background: var(--blood);
     }
 
     @keyframes fadeUp {
@@ -426,14 +427,14 @@
       font-family: var(--ff-head);
       font-size: clamp(1.6rem, 3.5vw, 2.8rem);
       font-weight: 700;
-      color: #fff;
+      color: var(--blood-2);
       line-height: 1.15;
       margin-bottom: 48px;
     }
 
     hr.rule {
       border: none;
-      border-top: 1px solid rgba(181, 42, 28, .2);
+      border-top: 1px solid rgba(255, 183, 197, .4);
       margin: 0;
     }
 
@@ -455,17 +456,17 @@
     .lore-text p {
       font-size: 1.05rem;
       line-height: 1.85;
-      color: rgba(237, 228, 230, .72);
+      color: rgba(59, 42, 51, .85);
       margin-bottom: 18px;
     }
 
     .lore-text p em {
-      color: var(--sakura);
+      color: var(--blood);
       font-style: italic;
     }
 
     .lore-text p strong {
-      color: #fff;
+      color: var(--blood-2);
     }
 
     .lore-quote {
@@ -478,7 +479,7 @@
     .lore-quote p {
       font-size: 1.05rem;
       font-style: italic;
-      color: var(--sakura-lo);
+      color: var(--blood-2);
       margin: 0;
     }
 
@@ -488,7 +489,7 @@
       font-family: var(--ff-mono);
       font-size: .65rem;
       letter-spacing: .2em;
-      color: var(--gold);
+      color: var(--blood);
       font-style: normal;
     }
 
@@ -501,7 +502,7 @@
       padding: 14px 0;
       border-bottom: 1px solid var(--rimw);
       font-size: .95rem;
-      color: rgba(237, 228, 230, .65);
+      color: rgba(59, 42, 51, .75);
       display: flex;
       gap: 14px;
       align-items: flex-start;
@@ -557,7 +558,7 @@
     .char-card h3 {
       font-family: var(--ff-head);
       font-size: 1rem;
-      color: var(--sakura-lo);
+      color: var(--blood-2);
       margin-bottom: 6px;
       letter-spacing: .08em;
     }
@@ -565,14 +566,14 @@
     .char-card .char-jp {
       font-family: var(--ff-mono);
       font-size: .7rem;
-      color: var(--gold);
+      color: var(--blood);
       letter-spacing: .2em;
       margin-bottom: 20px;
     }
 
     .char-card p {
       font-size: .95rem;
-      color: rgba(237, 228, 230, .62);
+      color: rgba(59, 42, 51, .72);
       line-height: 1.75;
     }
 
@@ -587,7 +588,7 @@
       font-family: var(--ff-mono);
       font-size: .62rem;
       letter-spacing: .18em;
-      color: var(--gold);
+      color: var(--blood);
       text-transform: uppercase;
       padding: 10px 12px;
       border-bottom: 1px solid var(--rim);
@@ -596,8 +597,8 @@
 
     .state-table td {
       padding: 10px 12px;
-      color: rgba(237, 228, 230, .68);
-      border-bottom: 1px solid rgba(255, 255, 255, .04);
+      color: rgba(59, 42, 51, .78);
+      border-bottom: 1px solid rgba(255, 255, 255, .2);
       vertical-align: top;
     }
 
@@ -608,9 +609,9 @@
     .flame-badge {
       display: inline-block;
       padding: 2px 8px;
-      background: rgba(232, 93, 4, .15);
-      border: 1px solid rgba(232, 93, 4, .35);
-      color: var(--flame-hi);
+      background: rgba(255, 183, 197, .3);
+      border: 1px solid rgba(255, 183, 197, .6);
+      color: var(--blood-2);
       font-size: .72rem;
       font-family: var(--ff-mono);
       letter-spacing: .1em;
@@ -637,19 +638,20 @@
     }
 
     .enemy-card:hover {
-      border-color: rgba(181, 42, 28, .45);
+      border-color: rgba(255, 183, 197, .6);
       transform: translateY(-4px);
     }
 
     .enemy-icon {
       font-size: 1.8rem;
       margin-bottom: 12px;
+      color: var(--blood);
     }
 
     .enemy-card h3 {
       font-family: var(--ff-head);
       font-size: .88rem;
-      color: var(--sakura-lo);
+      color: var(--blood-2);
       margin-bottom: 6px;
       letter-spacing: .05em;
     }
@@ -657,7 +659,7 @@
     .enemy-jp {
       font-family: var(--ff-mono);
       font-size: .62rem;
-      color: var(--gold);
+      color: var(--blood);
       letter-spacing: .18em;
       margin-bottom: 14px;
       display: block;
@@ -665,7 +667,7 @@
 
     .enemy-card p {
       font-size: .88rem;
-      color: rgba(237, 228, 230, .58);
+      color: rgba(59, 42, 51, .7);
       line-height: 1.7;
     }
 
@@ -706,14 +708,14 @@
     .feature h3 {
       font-family: var(--ff-head);
       font-size: .92rem;
-      color: #fff;
+      color: var(--blood-2);
       margin-bottom: 12px;
       letter-spacing: .05em;
     }
 
     .feature p {
       font-size: .9rem;
-      color: rgba(237, 228, 230, .58);
+      color: rgba(59, 42, 51, .7);
       line-height: 1.72;
     }
 
@@ -755,13 +757,14 @@
 
     .loop-step .icon {
       font-size: 1.6rem;
+      color: var(--blood-2);
     }
 
     .loop-step .txt {
       font-family: var(--ff-mono);
       font-size: .65rem;
       letter-spacing: .12em;
-      color: rgba(237, 228, 230, .6);
+      color: rgba(59, 42, 51, .7);
       margin-top: 8px;
       display: block;
     }
@@ -786,7 +789,7 @@
       grid-template-columns: 130px 1fr;
       gap: 24px;
       padding: 20px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, .05);
+      border-bottom: 1px solid rgba(255, 255, 255, .2);
       align-items: start;
     }
 
@@ -804,7 +807,7 @@
     .ms-rank {
       font-family: var(--ff-head);
       font-size: .85rem;
-      color: var(--sakura-lo);
+      color: var(--blood-2);
       letter-spacing: .08em;
       margin-bottom: 4px;
     }
@@ -812,7 +815,7 @@
     .ms-jp {
       font-family: var(--ff-mono);
       font-size: .62rem;
-      color: var(--gold);
+      color: var(--blood);
       letter-spacing: .15em;
       margin-bottom: 6px;
       display: block;
@@ -820,7 +823,7 @@
 
     .ms-desc {
       font-size: .88rem;
-      color: rgba(237, 228, 230, .5);
+      color: rgba(59, 42, 51, .7);
     }
 
     /* ─── ATMOSPHERE ─── */
@@ -855,7 +858,7 @@
       font-family: var(--ff-mono);
       font-size: .62rem;
       letter-spacing: .25em;
-      color: var(--gold);
+      color: var(--blood);
       margin-bottom: 8px;
       display: block;
     }
@@ -863,13 +866,13 @@
     .atm-card h3 {
       font-family: var(--ff-head);
       font-size: 1rem;
-      color: #fff;
+      color: var(--blood-2);
       margin-bottom: 4px;
     }
 
     .atm-card .meaning {
       font-size: .8rem;
-      color: var(--sakura);
+      color: var(--blood);
       font-style: italic;
       margin-bottom: 18px;
       display: block;
@@ -877,7 +880,7 @@
 
     .atm-card p {
       font-size: .9rem;
-      color: rgba(237, 228, 230, .55);
+      color: rgba(59, 42, 51, .7);
       line-height: 1.75;
     }
 
@@ -903,7 +906,7 @@
     .privacy-body h3 {
       font-family: var(--ff-head);
       font-size: 1.1rem;
-      color: var(--sakura-lo);
+      color: var(--blood-2);
       margin: 36px 0 12px;
       letter-spacing: .05em;
     }
@@ -915,7 +918,7 @@
     .privacy-body h4 {
       font-family: var(--ff-mono);
       font-size: .72rem;
-      color: var(--gold);
+      color: var(--blood);
       letter-spacing: .2em;
       text-transform: uppercase;
       margin: 24px 0 10px;
@@ -923,7 +926,7 @@
 
     .privacy-body p {
       font-size: .95rem;
-      color: rgba(237, 228, 230, .65);
+      color: rgba(59, 42, 51, .75);
       line-height: 1.82;
       margin-bottom: 14px;
     }
@@ -935,7 +938,7 @@
 
     .privacy-body ul li {
       font-size: .93rem;
-      color: rgba(237, 228, 230, .6);
+      color: rgba(59, 42, 51, .7);
       line-height: 1.75;
       padding: 5px 0 5px 20px;
       position: relative;
@@ -949,7 +952,7 @@
     }
 
     .privacy-body a {
-      color: var(--sakura);
+      color: var(--blood);
       text-underline-offset: 3px;
     }
 
@@ -957,30 +960,33 @@
       font-family: var(--ff-mono);
       font-size: .65rem;
       letter-spacing: .2em;
-      color: var(--gold);
+      color: var(--blood);
       margin-bottom: 36px;
       display: block;
     }
 
     /* ─── FOOTER ─── */
     footer {
-      border-top: 1px solid rgba(181, 42, 28, .15);
+      border-top: 1px solid rgba(255, 183, 197, .4);
       padding: 52px 24px;
       text-align: center;
     }
 
     .footer-logo {
-      font-family: var(--ff-head);
-      font-size: 1.1rem;
-      color: var(--blood);
-      letter-spacing: .2em;
-      margin-bottom: 6px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo img {
+      max-height: 80px;
+      opacity: 0.85;
     }
 
     .footer-sub {
       font-family: var(--ff-mono);
       font-size: .62rem;
-      color: rgba(237, 228, 230, .25);
+      color: rgba(59, 42, 51, .6);
       letter-spacing: .25em;
       margin-bottom: 24px;
     }
@@ -998,19 +1004,19 @@
       font-family: var(--ff-mono);
       font-size: .62rem;
       letter-spacing: .2em;
-      color: rgba(237, 228, 230, .35);
+      color: rgba(59, 42, 51, .7);
       text-decoration: none;
       text-transform: uppercase;
       transition: color .25s;
     }
 
     .footer-links a:hover {
-      color: var(--sakura);
+      color: var(--blood);
     }
 
     .footer-copy {
       font-size: .82rem;
-      color: rgba(237, 228, 230, .2);
+      color: rgba(59, 42, 51, .5);
     }
 
     /* ─── MISC ─── */
@@ -1024,7 +1030,7 @@
 
     .spacer {
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(181, 42, 28, .2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 183, 197, .4), transparent);
     }
   </style>
 </head>
@@ -1035,7 +1041,7 @@
   <nav>
     <a href="#" class="nav-logo">
       <img src="bi_logo.png" alt="ONIZAKURA"
-        style="max-height: 28px; vertical-align: middle; filter: drop-shadow(0 0 8px rgba(181,42,28,0.5));" />
+        style="max-height: 28px; vertical-align: middle; filter: drop-shadow(0 0 8px rgba(255,183,197,0.5));" />
     </a>
     <ul class="nav-links">
       <li><a href="#lore">Lore</a></li>
@@ -1301,7 +1307,7 @@
     <div class="section-inner">
       <span class="label">// Narrative Progression</span>
       <h2 class="s-title">Breaking the Curse — Kill by Kill</h2>
-      <p style="color:rgba(237,228,230,.62); margin-bottom:40px; max-width:640px;">
+      <p style="color:rgba(59,42,51,.72); margin-bottom:40px; max-width:640px;">
         The curse does not break all at once. With each milestone reached, Onimaru's demon form weakens — and the human
         beneath slowly resurfaces.
       </p>
@@ -1488,17 +1494,17 @@
   </section>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">ONIZAKURA</div>
-    <div class="footer-sub">鬼桜 — Demon Sakura: Cursed Blade</div>
+  <footer id="privacy">
+    <div class="footer-logo">
+      <img src="ci_logo.png" alt="STAY VIBE GAME STUDIO" />
+    </div>
+    <div class="footer-sub">STAY VIBE &copy; 2026</div>
     <ul class="footer-links">
-      <li><a href="#lore">Lore</a></li>
-      <li><a href="#gameplay">Gameplay</a></li>
-      <li><a href="#atmosphere">World</a></li>
-      <li><a href="#privacy">Privacy Policy</a></li>
-      <li><a href="mailto:stayvibe33@gmail.com">Contact</a></li>
+      <li><a href="#">Support</a></li>
+      <li><a href="#">Press Kit</a></li>
+      <li><a href="#">Privacy Policy</a></li>
     </ul>
-    <div class="footer-copy">© 2026 Stay Vibe. All Rights Reserved.</div>
+    <p class="footer-copy">All registered trademarks are property of their respective owners.</p>
   </footer>
 
 </body>
